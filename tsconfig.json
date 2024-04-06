@@ -1,22 +1,24 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "target": "ESNext",
+    "module": "ESNext",
     "lib": [
       "DOM",
       "DOM.Iterable",
       "ESNext"
     ],
-    "allowJs": false,
-    "checkJs": false,
+    "allowJs": true,
+    "checkJs": true,
     "sourceMap": true,
     "outDir": "./dist",
     "jsx": "preserve",
+    "jsxImportSource": "vue",
     "downlevelIteration": true,
     "isolatedModules": true,
+    "noEmit": true,
     /* Strict Type-Checking Options */
     "strict": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "strictBindCallApply": true,
@@ -40,7 +42,11 @@
     /* Advanced Options */
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "types": [
+      "element-plus/global",
+      // "element-plus/global.d.ts"
+    ]
   },
   "ts-node": {
     "compilerOptions": {
@@ -49,12 +55,15 @@
   },
   "include": [
     "src/**/*",
+    "src/**/*.ts",
     "src/**/*.vue",
     "src/env.d.ts",
     "webpack",
     ".eslintrc.js",
-    "www.ts",
     "vite.config.ts",
     "babel.config.js"
-  ]
+  ],
+  "vueCompilerOptions": {
+    "target": 3
+  }
 }

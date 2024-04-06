@@ -1,3 +1,4 @@
 public
 dist
 src/env.d.ts
+src/components/form-component/components/wang-editor.min.js

@@ -3,23 +3,32 @@ import * as path from 'path';
 import ProgressBarPlugin from 'progress-bar-webpack-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import { consoleFormat } from '@szhou/script-tools';
+import { VueLoaderPlugin } from 'vue-loader';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import webpack from 'webpack';
-import config from './config';
+import packageJSON from '../package.json';
 
-const { srcPath, moduleFileExtensions, appPath } = config;
-const isDev = process.env.NODE_ENV === 'development';
 consoleFormat();
 
-const common = {
-  context: appPath,
-  output: {
-    filename: 'static/js/[name].js',
-    chunkFilename: 'static/js/[name].chunk.js',
-    publicPath: '',
-    clean: true,
+const common: webpack.Configuration = {
+  entry: {
+    polyfill: ['core-js/stable'],
+    index: path.join(__dirname, '../src/main.ts'),
   },
+  output: {
+    filename: 'js/[name].js',
+    chunkFilename: 'js/[name].chunk.js',
+    publicPath: '/', //todo
+    clean: true,
+    path: path.resolve(__dirname, '../dist'),
+    library: `${packageJSON.name}-[name]`,
+    libraryTarget: 'umd',
+    chunkLoadingGlobal: `webpackJsonp_${packageJSON.name}`,
+    globalObject: 'window',
+  },
+  target: ['web'],
   resolve: {
-    extensions: moduleFileExtensions,
+    extensions: ['.ts', '.vue', '.json', '.js'],
     plugins: [
       new TsconfigPathsPlugin({
         configFile: path.resolve(__dirname, '../tsconfig.json'),
@@ -35,64 +44,62 @@ const common = {
     strictExportPresence: true,
     rules: [
       {
-        oneOf: [
+        test: /\.vue$/,
+        exclude: /node_modules/,
+        loader: 'vue-loader',
+        options: {
+          compilerOptions: {
+            jsx: true,
+          },
+        },
+      },
+      {
+        test: /\.(js|jsx|ts|tsx)$/,
+        exclude: /node_modules/,
+        use: ['thread-loader', 'babel-loader'],
+      },
+      {
+        test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.svg$/],
+        type: 'asset',
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.scss$/,
+        include: [path.join(__dirname, '../node_modules/.pnpm/element-plus'), path.join(__dirname, '../src')],
+        use: [
           {
-            test: /\.[jt]s?$/,
-            include: srcPath,
-            exclude: /node_modules/,
-            use: ['thread-loader', 'babel-loader'],
+            loader: 'style-loader',
           },
           {
-            test: /\.vue$/,
-            loader: 'vue-loader',
+            loader: 'css-loader',
           },
           {
-            test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.svg$/],
-            type: 'asset',
-          },
-          {
-            test: /\.css$/,
-            include: /node_modules/,
-            exclude: srcPath,
-            use: ['style-loader', 'css-loader'],
-          },
-          {
-            test: /\.(less|css)$/,
-            include: srcPath,
-            exclude: /node_modules/,
-            use: [
-              {
-                loader: 'style-loader',
-              },
-              {
-                loader: 'css-loader',
-                options: {
-                  modules: {
-                    localIdentName: isDev ? '[path][name]_[local]_[hash:base64:5]' : '[hash:base64]',
-                    // hashPrefix: 'monitor',
-                  },
-                },
-              },
-              {
-                loader: 'less-loader',
-                options: {
-                  lessOptions: {
-                    javascriptEnabled: true,
-                  },
-                },
-              },
-            ],
+            loader: 'sass-loader',
+            options: {
+              additionalData: '@use "./src/styles/variables.scss" as *;',
+            },
           },
         ],
       },
     ],
   },
   plugins: [
+    new HtmlWebpackPlugin({
+      inject: true,
+      template: path.join(__dirname, '../public/index.html'),
+    }),
     new ProgressBarPlugin(),
     new webpack.ProvidePlugin({}),
     new webpack.DefinePlugin({
       process: { env: {} },
+      __VUE_OPTIONS_API__: 'true',
+      __VUE_PROD_DEVTOOLS__: 'false',
+      __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'false',
     }),
+    new VueLoaderPlugin(),
   ],
 };
 

@@ -1,4 +1,4 @@
 module.exports = {
-  'src/**/*.vue': ['prettier --write', 'eslint --fix'],
-  'src/**/*.{ts,vue}': () => 'tsc --noEmit',
+  'src/**/*.{vue,ts,js}': ["eslint --rule \"'no-console':'error'\""],
+  'src/**/*.{ts,vue}': () => 'vue-tsc --noEmit',
 };

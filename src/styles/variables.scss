@@ -1,0 +1,133 @@
+//全局变量统一写在这个文件，不要再写别的地方
+
+@forward 'element-plus/theme-chalk/src/mixins/config.scss' with (
+  $namespace: 'ep' //todo
+);
+
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+  $colors: (
+    'primary': (
+      'base': #1890ff,
+    ),
+    'success': (
+      'base': #67c23a,
+    ),
+    'warning': (
+      'base': #faad14,
+    ),
+    'danger': (
+      'base': #f56c6c,
+    ),
+    'error': (
+      'base': #ff4d4f,
+    ),
+    'info': (
+      'base': #005eb8,
+    ),
+  )
+);
+
+// base color
+$blue: #324157;
+$light-blue: #3a71a8;
+$red: #c03639;
+$pink: #e65d6e;
+$green: #30b08f;
+$tiffany: #4ab7bd;
+$yellow: #fec171;
+$panGreen: #30b08f;
+// sidebar
+$menuText: #bfcbd9;
+$menuActiveText: #409eff;
+$subMenuActiveText: #f4f4f5; // https://github.com/ElemeFE/element/issues/12951
+$menuActiveBg: rgba(45, 153, 255, 0.3);
+$menuBg: #002140;
+$menuHover: rgba(45, 153, 255, 0.3);
+$subMenuBg: #002950;
+$subMenuHover: rgba(45, 153, 255, 0.3);
+$sideBarWidth: 200px;
+
+/* Variables */
+
+$primaryColor: #2d99ff;
+$warningColor: #ffba00;
+$successColor: #67c23a;
+$dangerColor: #ff4d4f;
+$infoColor: #5d5d5d;
+$primaryColor_85: rgba(31, 113, 255, 0.85);
+$primaryColor_80: rgba(31, 113, 255, 0.8);
+$primaryColor_70: rgba(31, 113, 255, 0.7);
+$primaryColor_50: rgba(31, 113, 255, 0.5);
+$primaryColor_40: rgba(31, 113, 255, 0.4);
+$primaryColor_30: rgba(31, 113, 255, 0.3);
+$primaryColor_20: rgba(31, 113, 255, 0.2);
+$primaryColor_24: rgba(31, 113, 255, 0.24);
+$primaryColor_15: rgba(31, 113, 255, 0.15);
+$primaryColor_12: rgba(31, 113, 255, 0.12);
+$primaryColor_10: rgba(31, 113, 255, 0.1);
+$primaryColor_8: rgba(31, 113, 255, 0.08);
+$primaryColor_4: rgba(31, 113, 255, 0.04);
+$globalColor: #e60012;
+// 字体的颜色
+$defaultFontColor: rgba(20, 35, 69, 1);
+$grayFontColor: rgba(0, 0, 0, 0.65);
+$primaryFontColor: rgba(45, 153, 255, 1);
+$stepsIconFontColor: rgba(0, 0, 0, 0.25);
+$stepsTitleFontColor: rgba(0, 0, 0, 0.45);
+// 页面背景色
+$defaultPageBgColor: #f0f0f0;
+$fontSize_4: 4px;
+$fontSize_10: 10px;
+$fontSize_12: 12px;
+$fontSize_14: 14px;
+$fontSize_16: 16px;
+$fontSize_18: 18px;
+$fontSize_20: 20px;
+$fontSize_22: 22px;
+$fontSize_24: 24px;
+$fontSize_26: 26px;
+$fontSize_28: 28px;
+$fontSize_30: 30px;
+$fontSize_32: 32px;
+$fontSize_36: 36px;
+$fontSize_40: 40px;
+$fontSize_72: 72px;
+$fontSize_90: 90px;
+// page
+$minPageWidth: 1000px;
+$defaultPageWidth: 1200px;
+$topNavBarHeight: 40px;
+$topBarHeight: 64px;
+$topMenuBarHeight: 80px;
+$componentsSpace: 24px; // 卡片间隔
+// table
+$tableHeaderBg: #fafafa;
+$tableHeaderHeight: 48px;
+$tableAlign: center;
+// dialog
+$dialogHeaderFont: #17335b;
+// the :export directive is the magic sauce for webpack
+// https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
+:export {
+  menuText: $menuText;
+  menuActiveText: $menuActiveText;
+  subMenuActiveText: $subMenuActiveText;
+  menuActiveBg: $menuActiveBg;
+  menuBg: $menuBg;
+  menuHover: $menuHover;
+  subMenuBg: $subMenuBg;
+  subMenuHover: $subMenuHover;
+  sideBarWidth: $sideBarWidth;
+  primaryColor: $primaryColor;
+  primaryFontColor: $primaryFontColor;
+  primaryColor_8: $primaryColor_8;
+  globalColor: $globalColor;
+  defaultFontColor: $defaultFontColor;
+  tableHeaderBg: $tableHeaderBg;
+  tableHeaderHeight: $tableHeaderHeight;
+  tableAlign: $tableAlign;
+  fontSize_14: $fontSize_14;
+  fontSize_16: $fontSize_16;
+  fontSize_18: $fontSize_18;
+  fontSize_24: $fontSize_24;
+}
