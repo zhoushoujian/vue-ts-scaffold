@@ -1,7 +1,13 @@
 module.exports = {
   presets: [
     '@vue/cli-plugin-babel/preset',
-    '@babel/preset-typescript',
+    [
+      '@babel/preset-typescript',
+      {
+        allExtensions: true,
+        isTSX: true,
+      },
+    ],
     [
       '@babel/preset-env',
       {
