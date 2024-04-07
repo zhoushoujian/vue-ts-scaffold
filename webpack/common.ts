@@ -2,31 +2,46 @@ import * as path from 'path';
 //@ts-ignore
 import ProgressBarPlugin from 'progress-bar-webpack-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
-import { consoleFormat } from '@szhou/script-tools';
-import { VueLoaderPlugin } from 'vue-loader';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { VueLoaderPlugin } from 'vue-loader';
 import webpack from 'webpack';
-import packageJSON from '../package.json';
-
-consoleFormat();
 
 const common: webpack.Configuration = {
   entry: {
-    polyfill: ['core-js/stable'],
     index: path.join(__dirname, '../src/main.ts'),
   },
   output: {
     filename: 'js/[name].js',
     chunkFilename: 'js/[name].chunk.js',
-    publicPath: '/', //todo
+    publicPath: process.env.NODE_ENV === 'development' ? '/' : '/portal/', //todo
     clean: true,
     path: path.resolve(__dirname, '../dist'),
-    library: `${packageJSON.name}-[name]`,
-    libraryTarget: 'umd',
-    chunkLoadingGlobal: `webpackJsonp_${packageJSON.name}`,
-    globalObject: 'window',
+    environment: {
+      // The environment supports arrow functions ('() => { ... }').
+      arrowFunction: false,
+      // The environment supports BigInt as literal (123n).
+      bigIntLiteral: false,
+      // The environment supports const and let for variable declarations.
+      const: false,
+      // The environment supports destructuring ('{ a, b } = obj').
+      destructuring: false,
+      // The environment supports an async import() function to import EcmaScript modules.
+      dynamicImport: false,
+      // The environment supports an async import() when creating a worker, only for web targets at the moment.
+      dynamicImportInWorker: false,
+      // The environment supports 'for of' iteration ('for (const x of array) { ... }').
+      forOf: false,
+      // The environment supports 'globalThis'.
+      globalThis: false,
+      // The environment supports ECMAScript Module syntax to import ECMAScript modules (import ... from '...').
+      module: false,
+      // The environment supports optional chaining ('obj?.a' or 'obj?.()').
+      optionalChaining: false,
+      // The environment supports template literals.
+      templateLiteral: false,
+    },
   },
-  target: ['web'],
+  target: ['web', 'es5'],
   resolve: {
     extensions: ['.ts', '.vue', '.json', '.js'],
     plugins: [
@@ -46,20 +61,19 @@ const common: webpack.Configuration = {
       {
         test: /\.vue$/,
         exclude: /node_modules/,
-        loader: 'vue-loader',
-        options: {
-          compilerOptions: {
-            jsx: true,
+        use: [
+          {
+            loader: 'vue-loader',
           },
-        },
+        ],
       },
       {
-        test: /\.(js|jsx|ts|tsx)$/,
-        exclude: /node_modules/,
+        test: /\.[jt]s$/,
+        include: [path.resolve(__dirname, '../src'), /node_modules/],
         use: ['thread-loader', 'babel-loader'],
       },
       {
-        test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.svg$/],
+        test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.svg$/, /\.woff$/, /\.ttf$/],
         type: 'asset',
       },
       {
@@ -68,7 +82,7 @@ const common: webpack.Configuration = {
       },
       {
         test: /\.scss$/,
-        include: [path.join(__dirname, '../node_modules/.pnpm/element-plus'), path.join(__dirname, '../src')],
+        exclude: /node_modules/,
         use: [
           {
             loader: 'style-loader',
@@ -79,7 +93,7 @@ const common: webpack.Configuration = {
           {
             loader: 'sass-loader',
             options: {
-              additionalData: '@use "./src/styles/variables.scss" as *;',
+              additionalData: '@import "./src/styles/variables.scss";',
             },
           },
         ],
@@ -95,9 +109,6 @@ const common: webpack.Configuration = {
     new webpack.ProvidePlugin({}),
     new webpack.DefinePlugin({
       process: { env: {} },
-      __VUE_OPTIONS_API__: 'true',
-      __VUE_PROD_DEVTOOLS__: 'false',
-      __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'false',
     }),
     new VueLoaderPlugin(),
   ],

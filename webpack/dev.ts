@@ -1,5 +1,4 @@
 import webpack from 'webpack';
-import * as path from 'path';
 import { merge } from 'webpack-merge';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
@@ -23,65 +22,45 @@ const dev: webpack.Configuration = merge(commonConf, {
       allowAsyncCycles: false,
       cwd: process.cwd(),
     }),
-    new ForkTsCheckerWebpackPlugin({
-      typescript: {
-        configFile: path.resolve(__dirname, '../tsconfig.json'),
-        extensions: {
-          vue: {
-            enabled: true,
-            compiler: '@vue/compiler-sfc',
-          },
-        },
-      },
-      eslint: {
-        files: './src/**/*.{ts,tsx,js,jsx,vue}',
-      },
-    }),
+    new ForkTsCheckerWebpackPlugin(),
   ],
+  //这个配置用于开启热更新，如果要支持IE，就注释掉，否则打开
+  optimization: {
+    runtimeChunk: 'single',
+  },
   devServer: {
-    //todo
-    port: 8443,
+    port: 8000,
     historyApiFallback: true,
     //启用热更新
     liveReload: true,
-    // hot: true,
+    hot: true,
     client: {
       overlay: false,
       logging: 'none',
     },
     //todo
-    open: `/scaffold/redirect`,
+    open: `/portal/404`,
     headers: { 'Access-Control-Allow-Origin': '*' },
     proxy: {
       //todo
       '/api': {
-        target: 'http://119.3.170.85:30102',
+        target: 'http://119.3.170.85:30080',
+        // target: 'http://10.110.10.35:10300',
         changeOrigin: true,
         pathRewrite: (path) => {
-          path = path.replace(/^\/api/, '');
+          // const rewritePath = path.replace(/^(\/api)+/g, '');
           // eslint-disable-next-line no-console
           console.log('/api/ path', path);
           return path;
         },
       },
       //todo
-      '/files': {
-        target: 'https://file.zhoushoujian.com',
+      '/payment': {
+        target: 'http://localhost:8001',
         changeOrigin: true,
-        pathRewrite: (path) => {
+        rewrite: (path: string) => {
           // eslint-disable-next-line no-console
-          console.log('/files path', path);
-          return path;
-        },
-      },
-      //todo
-      '/portal': {
-        // target: 'http://localhost:8000',
-        target: 'http://119.3.170.85:30100',
-        changeOrigin: true,
-        pathRewrite: (path) => {
-          // eslint-disable-next-line no-console
-          console.log('/portal path', path);
+          console.log('/payment proxy received, path: ', path);
           return path;
         },
       },

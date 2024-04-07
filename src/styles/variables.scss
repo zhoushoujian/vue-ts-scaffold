@@ -1,32 +1,5 @@
 //全局变量统一写在这个文件，不要再写别的地方
 
-@forward 'element-plus/theme-chalk/src/mixins/config.scss' with (
-  $namespace: 'ep' //todo
-);
-
-@forward 'element-plus/theme-chalk/src/common/var.scss' with (
-  $colors: (
-    'primary': (
-      'base': #1890ff,
-    ),
-    'success': (
-      'base': #67c23a,
-    ),
-    'warning': (
-      'base': #faad14,
-    ),
-    'danger': (
-      'base': #f56c6c,
-    ),
-    'error': (
-      'base': #ff4d4f,
-    ),
-    'info': (
-      'base': #005eb8,
-    ),
-  )
-);
-
 // base color
 $blue: #324157;
 $light-blue: #3a71a8;

@@ -1,78 +1,54 @@
 import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
+import vue from '@vitejs/plugin-vue2';
 import path from 'path';
+// import legacy from '@vitejs/plugin-legacy';
 import { visualizer } from 'rollup-plugin-visualizer';
 import vueJsx from '@vitejs/plugin-vue-jsx';
-import { consoleFormat } from '@szhou/script-tools';
-import qiankun from 'vite-plugin-qiankun';
-import checker from 'vite-plugin-checker';
 
-consoleFormat();
 const analyzer = process.env.type === 'analyzer';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   root: process.cwd(),
   publicDir: path.resolve(__dirname, './public'),
-  //todo
-  base: '/scaffold/',
+  base: '/',
   plugins: [
     vue(),
+    // legacy({
+    //   targets: ['Chrome 63'],
+    //   polyfills: true,
+    //   modernPolyfills: true,
+    // }),
     analyzer ? visualizer({ open: true }) : null,
     vueJsx(),
-    checker({
-      vueTsc: true,
-      overlay: false,
-    }),
-    //todo
-    qiankun('scaffold', {
-      useDevMode: true,
-    }),
   ].filter(Boolean),
   clearScreen: false,
   server: {
-    //todo
-    port: 8443,
+    port: 8000,
     strictPort: true,
-    open: `/scaffold/redirect`, //todo
-    hmr: {
-      overlay: false,
-    },
+    //todo
+    open: `/portal/404`,
+    hmr: true,
     cors: true,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-    },
     proxy: {
       //todo
       '/api': {
-        target: 'http://119.3.170.85:30102',
+        target: 'http://119.3.170.85:30080',
         changeOrigin: true,
         rewrite: (path) => {
-          path = path.replace(/^\/api/, '');
           // eslint-disable-next-line no-console
           console.log('/api path', path);
           return path;
         },
       },
       //todo
-      '/files': {
-        target: 'https://file.zhoushoujian.com',
+      '/payment': {
+        target: 'http://localhost:8001',
         changeOrigin: true,
-        rewrite: (path) => {
+        rewrite: (path: string) => {
           // eslint-disable-next-line no-console
-          console.log('/files path', path);
-          return path;
-        },
-      },
-      //todo
-      '/portal': {
-        // target: 'http://localhost:8000',
-        target: 'http://119.3.170.85:30100',
-        changeOrigin: true,
-        rewrite: (path) => {
-          // eslint-disable-next-line no-console
-          console.log('/portal path', path);
-          return path;
+          console.log('/payment proxy received, path: ', path);
+          return `http://localhost:8001${path}`;
         },
       },
     },
@@ -108,7 +84,7 @@ export default defineConfig({
     },
     preprocessorOptions: {
       scss: {
-        additionalData: '@use "./src/styles/variables.scss" as *;',
+        additionalData: '@import "./src/styles/variables.scss";',
       },
     },
   },

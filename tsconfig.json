@@ -12,7 +12,6 @@
     "sourceMap": true,
     "outDir": "./dist",
     "jsx": "preserve",
-    "jsxImportSource": "vue",
     "downlevelIteration": true,
     "isolatedModules": true,
     "noEmit": true,
@@ -23,7 +22,7 @@
     "strictFunctionTypes": true,
     "strictBindCallApply": true,
     "strictPropertyInitialization": true,
-    "noImplicitThis": true,
+    "noImplicitThis": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     /* Module Resolution Options */
@@ -42,11 +41,7 @@
     /* Advanced Options */
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "types": [
-      "element-plus/global",
-      // "element-plus/global.d.ts"
-    ]
+    "resolveJsonModule": true
   },
   "ts-node": {
     "compilerOptions": {
@@ -55,15 +50,11 @@
   },
   "include": [
     "src/**/*",
-    "src/**/*.ts",
     "src/**/*.vue",
     "src/env.d.ts",
     "webpack",
     ".eslintrc.js",
     "vite.config.ts",
     "babel.config.js"
-  ],
-  "vueCompilerOptions": {
-    "target": 3
-  }
+  ]
 }

@@ -1,0 +1,73 @@
+.http-code-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  .http-code {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -415px;
+    margin-top: -124px;
+    width: 830px;
+    .pic-code {
+      position: relative;
+      float: left;
+      width: 540px;
+      overflow: hidden;
+      &__parent {
+        width: 403px;
+      }
+    }
+    .bullshit {
+      position: relative;
+      float: left;
+      overflow: hidden;
+      &__oops {
+        font-weight: 500;
+        font-size: 56px;
+        line-height: 64px;
+        color: rgba(20, 35, 69, 1);
+        mix-blend-mode: normal;
+        opacity: 0.85;
+        margin-top: 40px;
+      }
+      &__info {
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 28px;
+        color: #96a6c2;
+        margin-top: 10px;
+      }
+      &__return-home {
+        display: block;
+        float: left;
+        width: 110px;
+        height: 36px;
+        background: #2d99ff;
+        border-radius: 6px;
+        text-align: center;
+        color: #ffffff;
+        opacity: 0;
+        font-size: 14px;
+        line-height: 36px;
+        cursor: pointer;
+        animation-name: slideUp;
+        animation-duration: 0.5s;
+        animation-delay: 0.3s;
+        animation-fill-mode: forwards;
+        margin-top: 30px;
+      }
+      @keyframes slideUp {
+        0% {
+          transform: translateY(60px);
+          opacity: 0;
+        }
+        100% {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+    }
+  }
+}

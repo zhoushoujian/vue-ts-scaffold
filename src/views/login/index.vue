@@ -1,139 +1,123 @@
 <template>
   <div class="login-component">
     <div class="login-page-wrap">
-      <img class="login-logo" src="../../assets/logo.png" alt="" />
       <div class="login-main-login">
         <div class="login-subtitle">用户登录</div>
-        <LoginCard
-          :loginFunc="loginFunc"
-          :showVerifyCode="true"
-          :verifyCodeKey="validateForm.key"
-          :verifyCodeSrc="createImg(validateForm.image)"
-          :handleVerifyCodeImgClick="getCaptchaFunc"
-        />
-        <div class="actions">
-          <RouterLink to="/forget-password">忘记密码？</RouterLink>
+        <div class="login-form-wrap">
+          <el-form ref="formRef" :model="validateForm" label-width="0">
+            <el-form-item label="" prop="username" :rules="[{ required: true, message: '请输入登录名' }]">
+              <el-input
+                v-model="validateForm.username"
+                prefix-icon="el-icon-user"
+                type="text"
+                autocomplete="off"
+                placeholder="登录名"
+              />
+            </el-form-item>
+            <el-form-item label="" prop="password" :rules="[{ required: true, message: '请输入密码' }]">
+              <el-input
+                v-model="validateForm.password"
+                prefix-icon="el-icon-lock"
+                :show-password="true"
+                type="password"
+                autocomplete="off"
+                placeholder="密码"
+                clearable
+              />
+            </el-form-item>
+            <el-form-item>
+              <el-button style="width: 100%" type="primary" @click="submitForm(formRef)">立即登录</el-button>
+            </el-form-item>
+          </el-form>
         </div>
       </div>
-    </div>
-    <div class="login-page-footer">
-      <FooterComponent />
     </div>
   </div>
 </template>
 
+<!-- eslint-disable no-console -->
 <script lang="ts" setup>
-import { onMounted, reactive } from 'vue';
-import { LoginCard } from '@szhou/components';
-import { createFile } from '@szhou/script-tools';
-import { useRouter } from 'vue-router';
-import { IFormState } from '@szhou/components/dist/vue/base/login-card/index.vue.d';
-import { getCaptcha, login } from '@/services/login';
+import { onMounted, reactive, ref } from 'vue';
+import { Message } from 'element-ui';
 import { VUE_APP_CLIENT_ID } from '@/constants/config';
-import FooterComponent from '@/layouts/footer-component.vue';
-import { encrypt } from '@/utils/common';
+import { getInfo, login } from '@/services/login';
+import routers from '@/routers/index';
+import { setAppId, setCorpId, setOrgId, setRefreshToken, setSecret, setToken, setUserInfo } from '@/utils/auth';
+
+const formRef = ref();
+
+const validateForm = reactive({
+  username: '',
+  password: '',
+});
 
 onMounted(() => {
-  getCaptchaFunc();
+  polyfillTest();
 });
 
-const router = useRouter();
-
-const validateForm = reactive<{
-  image: string;
-  key: string;
-}>({
-  image: '',
-  key: '',
-});
-
-const loginFunc = (formState: IFormState) => {
-  const { username, password, verifyCode } = formState;
-  return login({
-    username,
-    password: encrypt(password) as string,
-    channelCode: 'PROTAL_CORP',
-    loginType: 'password',
-    clientId: VUE_APP_CLIENT_ID,
-    captchaCode: verifyCode,
-    captchaKey: validateForm.key,
-  }).then((res: any) => {
-    if (res.data) {
-      localStorage.setItem('accessToken', res.data.accessToken);
-      localStorage.setItem('refreshToken', res.data.refreshToken);
-      localStorage.setItem('expiresTime', (res.data.expiresIn * 1000 + Date.now()).toString());
-    }
-    const tempLocation = localStorage.getItem('tempLocation');
-    if (tempLocation) {
-      window.location.href = tempLocation;
-      localStorage.removeItem('tempLocation');
+const submitForm = (formEl) => {
+  if (!formEl) return;
+  formEl.validate((valid) => {
+    if (valid) {
+      const { username, password } = validateForm;
+      login({
+        username,
+        password,
+        loginType: 'password',
+        clientId: VUE_APP_CLIENT_ID,
+      }).then((res) => {
+        if (res.rspCode !== '00000000') {
+          Message.error('账号密码不正确');
+          return undefined;
+        } else {
+          routers.push('/404');
+          setToken(res.data.accessToken);
+          setRefreshToken(res.data.refreshToken);
+          localStorage.setItem('aT', res.data.accessToken);
+          localStorage.setItem('rT', res.data.refreshToken);
+          setSecret(res.data.secret);
+          return getInfo().then((res) => {
+            if (res && res.rspCode === '00000000') {
+              const user = res.data;
+              setCorpId(user?.orgid || '');
+              setAppId(user.appid);
+              setOrgId(user.orgid);
+              setUserInfo(user);
+              localStorage.setItem('user', JSON.stringify(user));
+            }
+          });
+        }
+      });
     } else {
-      router.push('/redirect');
+      return;
     }
-    // if (res.rspCode !== '00000000') {
-    //   getCaptchaFunc();
-    // }
   });
 };
 
-const getCaptchaFunc = () => {
-  return getCaptcha({ clientId: VUE_APP_CLIENT_ID }).then((res) => {
-    const { image, key } = res.data || {};
-    validateForm.image = image;
-    validateForm.key = key;
-  });
-};
-
-const createImg = (params: string) => {
-  if (params) {
-    const file = createFile(params, true);
-    return URL.createObjectURL(file!);
-  } else {
-    return undefined;
-  }
+const polyfillTest = () => {
+  //test polyfill,确保用户可以使用低版本的chrome
+  //ES2015
+  console.log('String.startsWith', 'Object'.startsWith);
+  //ES2019
+  console.log('Object.fromEntries', Object.fromEntries);
+  //ES2020
+  console.log('Promise.AllSettled', Promise.allSettled);
+  console.log('null ?? 1', null ?? 1);
+  //ES2021
+  console.log('replaceAll', ''.replaceAll);
+  console.log('Promise.any', Promise.any);
+  //ES2022
+  console.log('Object.hasOwn', Object.hasOwn);
+  console.log('obj.hasOwnProperty', {}.hasOwnProperty);
+  console.log('array.at', [].at);
+  //ES2023
+  //@ts-ignore
+  console.log('findLast', [1, 2].findLast);
+  //@ts-ignore
+  console.log('toReversed', Array.prototype.toReversed);
 };
 </script>
 
 <style lang="scss" scoped>
-.login-component {
-  height: 100%;
-  width: 100%;
-
-  .login-page-wrap {
-    height: calc(100% - 280px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-image: url('../../assets/login-bg.png');
-    background-size: cover;
-    .login-main-login {
-      width: 320px;
-      background-color: white;
-      border-radius: 8px;
-      position: absolute;
-      right: 200px;
-      padding: 0 24px;
-
-      .login-subtitle {
-        text-align: center;
-        margin: 20px 0 20px 0;
-        cursor: default;
-        font-size: 18px;
-        color: $primaryColor;
-        padding: 8px 20px;
-      }
-      .actions {
-        margin-bottom: 12px;
-        display: flex;
-        justify-content: flex-end;
-      }
-    }
-  }
-
-  .login-logo {
-    position: absolute;
-    left: 200px;
-    top: 20px;
-  }
-}
+@import './index.scss';
 </style>

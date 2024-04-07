@@ -1,16 +1,15 @@
 module.exports = {
-  extends: ['@szhou/eslint-config/vue.js', '@szhou/eslint-config/base.js', '@szhou/eslint-config/prettier.js'],
+  extends: ['@szhou/eslint-config'],
   parser: 'vue-eslint-parser',
   parserOptions: {
     ecmaFeatures: {
+      jsx: true,
       modules: true,
     },
     parser: '@typescript-eslint/parser',
+    project: './tsconfig.json',
     createDefaultProgram: true,
     extraFileExtensions: ['.vue'],
-  },
-  globals: {
-    NodeJS: 'readonly',
   },
   env: {
     browser: true,

@@ -1,0 +1,53 @@
+.login-component {
+  height: 100%;
+  width: 100%;
+  background-image: url('../../assets/login-bg.png');
+  background-size: cover;
+
+  .login-page-wrap {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('../../assets/login-bg.png');
+    background-size: cover;
+    .login-main-login {
+      width: 320px;
+      background-color: white;
+      border-radius: 8px;
+      position: absolute;
+      right: 200px;
+      top: 30%;
+      padding: 0 24px;
+      border-radius: 24;
+      box-shadow: '5px 5px 30px rgba(0, 0, 0, 0.2)';
+
+      .login-subtitle {
+        text-align: center;
+        margin: 20px 0 20px 0;
+        cursor: default;
+        font-size: 18px;
+        color: #2d99ff;
+        padding: 8px 20px;
+      }
+
+      .actions {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 24px;
+
+        a {
+          text-decoration: none;
+          color: #1890ff;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
+  .login-logo {
+    position: absolute;
+    left: 200px;
+    top: 20px;
+  }
+}

@@ -4,7 +4,6 @@ import prod from './prod';
 
 const analyzer = merge(prod, {
   plugins: [
-    //@ts-ignore
     new BundleAnalyzerPlugin({
       //  可以是`server`，`static`或`disabled`。
       //  在`server`模式下，分析器将启动HTTP服务器来显示软件包报告。

@@ -11,9 +11,6 @@ const prod = merge(commonConf, {
   mode: 'production',
   devtool: 'nosources-source-map',
   bail: true,
-  output: {
-    publicPath: '/scaffold/', //todo
-  },
   optimization: {
     minimize: true,
     // moduleIds: 'hashed',

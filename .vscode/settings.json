@@ -19,11 +19,8 @@
   "files.eol": "\n",
   "git.ignoreLimitWarning": true,
   "cSpell.words": [
-    "Cascader",
     "Clientid",
-    "nprogress",
     "Pinia",
-    "qiankun",
-    "szhou"
+    "qiankun"
   ]
 }

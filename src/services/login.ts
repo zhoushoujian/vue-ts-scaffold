@@ -1,28 +1,27 @@
-import { IApiResponse } from '@szhou/components';
 import request from '@/utils/request';
-
-export const getCaptcha = (data: { clientId: string }): IApiResponse<{ image: string; key: string }> => {
-  return request({
-    url: '/portal/oauth/web/captcha/get',
-    method: 'POST',
-    data,
-  });
-};
 
 type ILoginReq = {
   username: string;
   password: string;
-  channelCode: string;
-  rememberMe?: boolean;
-  loginType: string;
-  clientId: string;
-  captchaCode: string;
-  captchaKey: string;
+  loginType: 'password';
+  clientId: '1651978103';
+  phone?: string;
+  smsKey?: string;
+  smsCode?: string;
+  code?: string;
 };
 export const login = (data: ILoginReq) => {
   return request({
-    url: '/portal/oauth/web/login',
+    url: '/base/admin/oauth/web/login',
     method: 'POST',
     data,
   });
 };
+
+// 获取用户详细信息
+export function getInfo() {
+  return request({
+    url: '/base/admin/uas/auth-user/info',
+    method: 'post',
+  });
+}
