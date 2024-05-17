@@ -2,9 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import { Error403Page, Error404Page } from '@szhou/components';
-import { routerPrefix } from '@/constants/enums';
 // import { guardForRoutePage } from '@szhou/script-tools';
 // import type { IMenuList } from '@szhou/script-tools';
+import { routerPrefix } from '@/constants/enums';
 
 NProgress.configure({ showSpinner: false });
 
@@ -52,9 +52,17 @@ const router = createRouter({
           component: () => import('../components/custom-card/test.vue'),
         },
         {
-          path: '/table-upload',
-          name: 'tableUpload',
-          component: () => import('../components/table-upload/index.vue'),
+          path: '/others',
+          name: 'others',
+          children: [
+            {
+              path: '/others/table-upload',
+              name: 'tableUpload',
+              //二级级页面（比如详情页或编辑页）一定要设置activeRoutePath，否则菜单不能自动高亮和自动展开
+              // meta: { activeRoutePath: '/others' },
+              component: () => import('../components/table-upload/index.vue'),
+            },
+          ],
         },
         {
           path: '/redirect',

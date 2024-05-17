@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { ElNotification } from 'element-plus';
-import { axiosInterceptorsResFunc } from '@szhou/script-tools';
+import { axiosInterceptorsResFunc } from '@szhou/components';
 import routers from '@/routers';
 import { VUE_APP_CLIENT_ID } from '@/constants/config';
 import { setTempLocation } from './utils';
@@ -97,7 +97,7 @@ export const dealWithUserEvent = () => {
   //   eventDebounceTimer = 'timer';
   //   if (expiresTimeValue && expiresTimeValue < Date.now()) {
   //     ElMessage({
-  //       message: 'token已过期',
+  //       message: '登录超时，请重新登录',
   //       type: 'error',
   //       duration: 5 * 1000,
   //     });

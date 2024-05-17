@@ -68,7 +68,11 @@ const common: webpack.Configuration = {
       },
       {
         test: /\.scss$/,
-        include: [path.join(__dirname, '../node_modules/.pnpm/element-plus'), path.join(__dirname, '../src')],
+        include: [
+          path.join(__dirname, '../node_modules/.pnpm/element-plus'), 
+          path.join(__dirname, '../node_modules/element-plus'), 
+          path.join(__dirname, '../src')
+        ],
         use: [
           {
             loader: 'style-loader',

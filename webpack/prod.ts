@@ -9,7 +9,7 @@ import commonConf from './common';
 
 const prod = merge(commonConf, {
   mode: 'production',
-  devtool: 'nosources-source-map',
+  devtool: false,
   bail: true,
   output: {
     publicPath: '/scaffold/', //todo
@@ -24,6 +24,8 @@ const prod = merge(commonConf, {
         vendors: {
           test: /[\\/]node_modules[\\/]/,
           priority: -10,
+          reuseExistingChunk: true,
+          maxSize: 1024000,
         },
         default: {
           minChunks: 2,

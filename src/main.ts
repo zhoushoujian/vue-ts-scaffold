@@ -2,15 +2,15 @@ import { createApp, App } from 'vue';
 import { createPinia } from 'pinia';
 import ElementPlus from 'element-plus';
 import 'element-plus/theme-chalk/src/index.scss';
-import 'element-plus/theme-chalk/el-message-box.css';
-import 'element-plus/theme-chalk/base.css';
-import 'element-plus/theme-chalk/el-overlay.css';
+import 'element-plus/theme-chalk/index.css';
 import 'element-plus/theme-chalk/el-reset.css';
 import '@szhou/components/dist/vue/esm/style.css';
+import * as tools from '@szhou/script-tools';
 import { renderWithQiankun, qiankunWindow, QiankunProps } from 'vite-plugin-qiankun/dist/helper';
 import router from '@/routers';
 import AppComponent from './app.vue';
 
+tools;
 let app: App<Element> | null;
 
 function render(container: HTMLElement | null, name: string) {

@@ -60,6 +60,8 @@ import { reactive } from 'vue';
 import { Select, Delete } from '@element-plus/icons-vue';
 import { ElMessage, UploadUserFile, type UploadFile, type UploadFiles } from 'element-plus';
 
+defineOptions({ name: 'TableUploadComponentTest' });
+
 type IUploadRowType = {
   accept: string;
   category: string;

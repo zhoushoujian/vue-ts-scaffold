@@ -29,12 +29,13 @@
 
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from 'vue';
-import { CustomFormComponent } from '@szhou/components';
+import { CustomFormComponent, useSendMsg } from '@szhou/components';
 import { createFile, validateMobilePhone, validateMsgCode } from '@szhou/script-tools';
 import { IFormEventParam, ISendMsgBtnType } from '@szhou/components/dist/vue/types/common';
 import { VUE_APP_CLIENT_ID } from '@/constants/config';
 import { getCaptcha } from '@/services/login';
-import { useSendMsg } from '@/utils/common';
+
+defineOptions({ name: 'CustomFormComponentTest' });
 
 const formRef = ref();
 const formData = reactive({
@@ -61,7 +62,14 @@ function handleEvent(params: IFormEventParam) {
         // eslint-disable-next-line no-console
         console.log('isValid', isValid);
         if (isValid) {
-          timerWorkFunc();
+          const result = timerWorkFunc();
+          if (result) {
+            //请求发送验证码的接口
+            // eslint-disable-next-line no-console
+            console.log('开始请求发送验证码的接口');
+            // const { timer } = result;
+            //获取定时器的timer，在验证码倒计时组件销毁的时候清除定时器
+          }
         }
       });
       break;
@@ -252,13 +260,23 @@ const formCols = reactive({
     ],
     [
       {
+        eType: 'TimePicker',
+        label: '项目开始时间',
+        placeholder: '请输入项目开始时间',
+        prop: 'effectTime',
+        noShow: false,
+        clearable: true,
+        span: 24,
+      },
+    ],
+    [
+      {
         eType: 'DatePicker',
         label: '项目日期时间',
         placeholder: '请输入项目日期时间',
         prop: 'effectDateTime',
         type: 'datetime',
         noShow: false,
-        valueFormat: 'YYYY-MM-DD hh:mm:ss',
         clearable: true,
         span: 24,
       },
@@ -268,9 +286,11 @@ const formCols = reactive({
         eType: 'DatePicker',
         type: 'datetimerange',
         label: '操作时间：',
-        valueFormat: 'YYYY-MM-DD hh:mm:ss',
         prop: 'createTime',
         span: 24,
+        format: 'YYYY-MM-DD HH:mm',
+        dateFormat: 'MMM DD, YYYY',
+        timeFormat: 'HH:mm',
       },
     ],
     [

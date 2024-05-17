@@ -12,6 +12,8 @@
     :tableCols="tableCols"
     :pagination="states.pagination"
     :loading="states.loading"
+    :isUseFEPagination="true"
+    @sortChange="sortChange"
     @loadData="loadData"
     @event="changeEvent"
   ></CustomCardComponent>
@@ -38,6 +40,8 @@ import type {
   IHandleDialogEventParams,
   IPaginationProps,
 } from '@szhou/components/dist/vue/types/common';
+
+defineOptions({ name: 'CustomCardComponentTest' });
 
 const customCardRef = ref<InstanceType<typeof CustomCardComponent>>();
 const dialogRef = ref<InstanceType<typeof CustomDialogComponent>>();
@@ -101,6 +105,7 @@ const tableCols = [
     prop: 'roleCode',
     align: 'center',
     fixed: 'left',
+    sortable: true,
   },
   {
     label: '角色名称',
@@ -167,16 +172,6 @@ const tableCols = [
           type: 'primary',
           link: true,
           handle: () => handleTableBtnEvent(row, 'isEnable'),
-        },
-        {
-          label: '删除',
-          type: 'primary',
-          link: true,
-          icon: Delete,
-          iconClass: 'delete',
-          handle: (row: (typeof states.tableData)[0]) => {
-            handleTableBtnEvent(row, 'delete');
-          },
         },
         {
           label: '删除',
@@ -311,8 +306,19 @@ const states = reactive({
       corpName: null,
       corpCode: null,
     },
+    {
+      roleId: '1725348654656620786',
+      roleName: '测试011',
+      roleCode: '010',
+      roleDesc: '',
+      isBuiltin: 'N',
+      isEnable: '',
+      corpId: null,
+      corpName: null,
+      corpCode: null,
+    },
   ],
-  pagination: { pageSize: 10, pageNum: 1, total: 10 },
+  pagination: { pageSize: 10, pageNo: 1, total: 11 },
   loading: false,
 });
 
@@ -327,6 +333,10 @@ onMounted(() => {
 const rules = {
   roleCode: [{ required: true }],
 };
+
+function sortChange(data: { column: any; prop: string; order: any }) {
+  console.log('sortChange data', data);
+}
 
 function loadData(pagination: IPaginationProps) {
   console.log('states.formData111', states.formData, 'pagination111', JSON.parse(JSON.stringify(pagination)));

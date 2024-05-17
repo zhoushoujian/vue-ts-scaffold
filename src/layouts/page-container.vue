@@ -43,7 +43,9 @@
           "
         >
           <router-view v-slot="{ Component }">
-            <component :is="Component" />
+            <KeepAlive :include="['CustomCardComponentTest', 'CustomFormComponentTest']">
+              <component :is="Component" />
+            </KeepAlive>
           </router-view>
         </div>
       </div>

@@ -6,6 +6,7 @@
       :pagination="pagination"
       :isSelection="true"
       @loadData="loadData"
+      @sortChange="sortChange"
       @select="handleSelectUser"
       @selectAll="handleSelectAll"
     >
@@ -17,6 +18,8 @@
 <script lang="ts" setup>
 import { CustomTableComponent } from '@szhou/components';
 import { IPaginationProps } from '@szhou/components/dist/vue/types/common';
+
+defineOptions({ name: 'CustomTableComponentTest' });
 
 const tableData = [
   {
@@ -48,6 +51,7 @@ const tableCols = [
   {
     label: 'Name',
     prop: 'name',
+    sortable: 'custom',
   },
   {
     label: 'Address',
@@ -59,6 +63,10 @@ const tableCols = [
 const pagination = {
   total: tableData.length,
 };
+
+function sortChange(data: { column: any; prop: string; order: any }) {
+  console.log('sortChange data', data);
+}
 
 const loadData = (pagination: IPaginationProps) => {
   console.log('pagination', pagination);

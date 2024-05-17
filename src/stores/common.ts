@@ -7,9 +7,9 @@ export const useCommonStore = defineStore('commonStore', () => {
 
   const currentOpenRoute = ref('');
 
-  function updateCurrentOpenRoute(path: string) {
+  function updateCurrentOpenRoute(path: string, needPush = true) {
     currentOpenRoute.value = path;
-    router.push(path);
+    needPush && router.push(path);
   }
 
   return {

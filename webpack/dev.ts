@@ -33,9 +33,6 @@ const dev: webpack.Configuration = merge(commonConf, {
           },
         },
       },
-      eslint: {
-        files: './src/**/*.{ts,tsx,js,jsx,vue}',
-      },
     }),
   ],
   devServer: {
